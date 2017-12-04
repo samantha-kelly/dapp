@@ -1,0 +1,115 @@
+<div class="wrapper">
+    <div></div>
+    <div class="center">
+        <header class="header-eleicoes">
+            <h2>Eleições na </h2>
+            <h1 class="header-blockchain">Blockchain</h1>
+        </header>
+
+        <button *ngIf="showBtnDeployContrato" type="button" (click)="criarContratoLocal()" class="btn btn-sm btn-primary btn-criar-contrato">
+            <i class="fa fa-dot-circle-o"></i> Criar Contrato da Votação</button>
+
+        <span *ngIf="contratoRegistrado" class="link-contrato">Endereço do contrato na Blockchain:
+            <a href="{{linkContrato}}">{{linkContrato}}</a>
+        </span>
+
+        <span *ngIf="contratoRegistrado" class="link-contrato">Registro do contrato:
+            <a href="{{registroContrato}}">{{registroContrato}}</a>
+        </span>
+
+
+        <section *ngIf="!cadastroVotacaoConcluida && !votacaoConcluida && !showBtnDeployContrato" class="main-cadastro-candidatos">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Candidatos</strong>
+                </div>
+                <div class="card-block">
+                    <section class="frm-candidato">
+
+                        <label class="form-control-label lbl-Numero">Numero:</label>
+                        <div>
+                            <input required [(ngModel)]="numeroCandidato" id="Numero" name="Numero" placeholder="Numero" class="form-control inputs-border">
+                        </div>
+                        <label id="campoNome" class="form-control-label lbl-Nome">Nome:</label>
+                        <div>
+                            <input required [(ngModel)]="nomeCandidato" id="nome" name="nome" placeholder="Nome Candidato" class="form-control inputs-border">
+                        </div>
+                        <button (click)="addCandidato()" type="button" class="btn btn-sm btn-primary">
+                            <i class="fa fa-plus"></i>
+                        </button>
+
+                    </section>
+
+                    <div *ngIf="candidatos.length>0" class="list-candidatos-wrapper">
+                        <section class="list-candidatos" *ngFor="let c of candidatos">
+                            <div class="list-candidatos-votacao-numero">{{c.numero}}</div>
+                            <div>{{c.nome}}</div>
+                            <div>
+                                <span>Registro:
+                                    <a href="https://kovan.etherscan.io/tx/{{c.transactionHash}}">{{c.transactionHash}}</a>
+                                </span>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="button" (click)="concluirCadastroVotacao()" class="btn btn-sm btn-primary">
+                        <i class="fa fa-dot-circle-o"></i> Concluir Cadastro Candidatos</button>
+                </div>
+            </div>
+        </section>
+
+        <section *ngIf="cadastroVotacaoConcluida" class="main-votacao">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Votação</strong>
+                </div>
+                <div class="card-block">
+                    <div *ngIf="candidatos.length>0" class="list-candidatos-wrapper-votacao">
+                        <section class="list-candidatos-votacao" *ngFor="let c of candidatos">
+                            <div class="list-candidatos-votacao-numero">{{c.numero}}</div>
+                            <div>{{c.nome}}</div>
+                            <button (click)="votarCandidato(c)" type="button" class="btn btn-sm btn-danger">
+                                <i class="fa fa-hand-pointer-o"></i> Votar</button>
+                            <div *ngIf="c.votacaoHash">
+                                <span>Registro:
+                                    <a href="https://kovan.etherscan.io/tx/{{c.votacaoHash}}">{{c.votacaoHash}}</a>
+                                </span>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="button" (click)="concluirVotacao()" class="btn btn-sm btn-primary">
+                        <i class="fa fa-dot-circle-o"></i> Concluir Votação</button>
+                </div>
+            </div>
+        </section>
+
+        <section *ngIf="votacaoConcluida" class="main-resultado-votacao">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Resultado Votação</strong>
+                </div>
+                <div class="card-block">
+                    <div *ngIf="candidatos.length>0" class="list-candidatos-wrapper-votacao">
+                        <section class="list-candidatos-resultado-votacao-cabecalho">
+                            <div class="list-candidatos-votacao-numero">Número</div>
+                            <div>Nome</div>
+                            <div class="list-candidatos-votacao-numero">Quantidade Votos</div>
+                        </section>
+                        <section class="list-candidatos-resultado-votacao" *ngFor="let c of candidatos">
+                            <div class="list-candidatos-votacao-numero">{{c.numero}}</div>
+                            <div>{{c.nome}}</div>
+                            <div class="list-candidatos-votacao-numero">{{c.qtdVotosCandidato}}</div>
+                        </section>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="qtd-votos-totais">Total de Votos: {{qtdVotosTotais}}</div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div></div>
+</div>
